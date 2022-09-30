@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "mailError";
+}
+
+
+<div class="alert alert-warning">
+    <h2>Email Failed</h2>
+    <h3>Your recognition has been created; however, the notification email was not sent successfully.</h3>
+</div>
+
+@Html.ActionLink("Return to recognitions page", "index", "UserRecognitions")

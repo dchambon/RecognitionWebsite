@@ -1,0 +1,147 @@
+﻿@model IEnumerable<CentricProjectTeam4.Models.RegisteredUser>
+
+@using Microsoft.AspNet.Identity;
+@using CentricProjectTeam4.Models;
+@using CentricProjectTeam4.DAL;
+
+@{
+    ViewBag.Title = "Profiles";
+}
+
+<style>
+    .panel-default {
+        background-color: #f5b843;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+    .btn-default {
+        background-color: #3e305b;
+        color: #FFF;
+        border-color: #3e305b;
+    }
+
+        .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+            background-color: #FFF;
+            color: #f5b843;
+            border-color: #FFF;
+        }
+</style>
+
+<div>
+    <br />
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-default">
+            <center>
+                <h3><strong>Employee Profiles</strong></h3>
+            </center>
+        </div>
+    </div>
+    <div class="col-sm-7">
+        <br />
+
+        @{
+            if (ViewBag.deleteFailed != null)
+            {
+                <div class="alert alert-danger">
+                    <h4>ViewBag.deleteFailed.ToString()</h4>
+                    <br />
+                </div>
+            }
+        }
+
+        @using (Html.BeginForm("Index", "RegisteredUsers", FormMethod.Get))
+        {
+            <b>
+                Search:
+            </b>
+            @Html.TextBox("search")
+            <input type="submit"
+                   name="submit"
+                   class="btn btn-default"
+                   value="Search" />
+
+
+        }
+    </div>
+    <div class="col-sm-2">
+        <br />
+        <a href="~/UserRecognitions/Create" class="btn btn-default" role="button">Give a Recognition</a>
+    </div>
+</div>
+
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th>
+                    @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm })
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.email)
+                    </th>*@
+                <th>
+                    @Html.ActionLink("Business Unit", "Index", new { sortOrder = ViewBag.LocationSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParm })
+                </th>
+                <th>
+                    @Html.ActionLink("Hire Date", "Index", new { sortOrder = ViewBag.HireDateSortParm })
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.firstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.lastName)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.role)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.hireDate)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.registeredUserID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.registeredUserID }) |
+                        @{
+                            // only allow delete link if director
+                            MyContext db = new MyContext();
+                            Guid registeredUserID;
+                            Guid.TryParse(User.Identity.GetUserId(), out registeredUserID);
+                            RegisteredUser currentUser = db.RegisteredUsers.Find(registeredUserID);
+                            if (currentUser != null)
+                            {
+                                bool isDirector = currentUser.role == RegisteredUser.roles.Director;
+                                if (isDirector)
+                                {
+                                    <a href="~/RegisteredUsers/delete/@item.registeredUserID"> Delete</a>
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>

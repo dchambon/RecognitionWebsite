@@ -1,0 +1,110 @@
+﻿@model CentricProjectTeam4.Models.UserRecognition
+
+@{
+    ViewBag.Title = "Give a Recognition";
+}
+
+<style>
+    .panel-default {
+        background-color: #f5b843;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+
+    .btn-default {
+        background-color: #3e305b;
+        color: #FFF;
+        border-color: #3e305b;
+    }
+
+        .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+            background-color: #FFF;
+            color: #f5b843;
+            border-color: #FFF;
+        }
+</style>
+
+<div>
+    <br />
+</div>
+
+<div class="panel panel-default">
+    <center>
+        <h3>
+            <strong>
+                Give a Recognition
+            </strong>
+        </h3>
+    </center>
+</div>
+
+<div class="row">
+    <div class="col-sm-10">
+        <p></p>
+    </div>
+    <div class="col-sm-2">
+        <a href="~/UserRecognitions/" class="btn btn-default" role="button">Back to recognitions</a>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <div class="col-md-3">
+            <p></p>
+        </div>
+        <div class="control-label col-md-2">
+            <b>Employee</b>
+        </div>
+        <div class="col-md-7">
+            @Html.DropDownList("registeredUserID", null, "Please Select", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.registeredUserID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.recGiver, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.recGiver, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.recGiver, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+    <div class="form-group">
+        <div class="col-md-3">
+            <p></p>
+        </div>
+        @Html.LabelFor(model => model.coreValue, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-7">
+            @Html.EnumDropDownListFor(model => model.coreValue, "Please Select", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.coreValue, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-3">
+            <p></p>
+        </div>
+        @Html.LabelFor(model => model.recognition, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-7">
+            @Html.TextAreaFor(model => model.recognition, 5, 120, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.recognition, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-5 col-md-7">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

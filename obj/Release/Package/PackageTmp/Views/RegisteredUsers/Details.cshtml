@@ -1,0 +1,162 @@
+﻿@model CentricProjectTeam4.Models.RegisteredUser
+
+@using CentricProjectTeam4.DAL;
+@using CentricProjectTeam4.Models;
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "Profile Details";
+}
+
+@{
+    var pageTitle = Model.firstName + " " + Model.lastName + "'s Profile";
+}
+
+<style>
+    .panel-default {
+        background-color: #f5b843;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+
+    .btn-default {
+        background-color: #3e305b;
+        color: #FFF;
+        border-color: #3e305b;
+    }
+
+        .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+            background-color: #FFF;
+            color: #f5b843;
+            border-color: #FFF;
+        }
+
+    img {
+        border: 5px solid #3e305b;
+    }
+</style>
+
+<div>
+    <br />
+</div>
+
+<div class="panel panel-default">
+    <center>
+        <h3>
+            <strong>
+                @{
+                    @Html.Label("Page Title", pageTitle);
+                }
+            </strong>
+        </h3>
+    </center>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        @{
+            MyContext db = new MyContext();
+
+            var currentUserID = Guid.Parse(User.Identity.GetUserId());
+            RegisteredUser currentUser = db.RegisteredUsers.Find(currentUserID);
+
+            if (currentUserID == Model.registeredUserID)
+            {
+                <a href="~/Manage/ChangePassword/" class="btn btn-default" role="button">Change your password</a>
+            }
+            else
+            {
+                <p></p>
+            }
+
+            }
+    </div>
+    <div class="col-sm-7">
+        <p></p>
+    </div>
+    <div class="col-sm-2">
+        <a href="~/RegisteredUsers/" class="btn btn-default" role="button">Back to profiles list</a>
+    </div>
+</div>
+
+
+
+<div>
+    <hr />
+
+    <div class="row">
+        <div class="col-sm-9">
+            <h4><strong>Personal Information:</strong></h4>
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.firstName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.firstName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.lastName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.lastName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.phone)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.phone)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.location)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.location)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.role)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.role)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.hireDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.hireDate)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-sm-3">
+            <img src="@Url.Content("~/Uploads/")@Model.profilePic" height="200" />
+        </div>
+    </div>
+
+    <h4><strong>Recognitions:</strong></h4>
+
+    @{
+        var receiver = db.UserRecognitions.Where(x => x.registeredUserID == Model.registeredUserID).OrderBy(x => x.recGiver).ToList();
+    }
+
+    @Html.Partial("_Recognitions", receiver)
+</div>
+

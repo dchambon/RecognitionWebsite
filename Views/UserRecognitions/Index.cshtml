@@ -1,0 +1,147 @@
+﻿@model IEnumerable<CentricProjectTeam4.Models.UserRecognition>
+
+@using Microsoft.AspNet.Identity;
+@using CentricProjectTeam4.Models;
+@using CentricProjectTeam4.DAL;
+
+@{
+    ViewBag.Title = "Recognitions";
+}
+
+<style>
+    .panel-default {
+        background-color: #f5b843;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+
+    .btn-default {
+        background-color: #3e305b;
+        color: #FFF;
+        border-color: #3e305b;
+    }
+
+        .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+            background-color: #FFF;
+            color: #f5b843;
+            border-color: #FFF;
+        }
+</style>
+
+<div>
+    <br />
+</div>
+
+@*<div class="row">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <center>
+                <h3><strong>Employee Recognitions</strong></h3>
+            </center>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <p></p>
+    </div>
+    <div class="col-sm-2">
+        <br />
+        <a href="~/UserRecognitions/Create" class="btn btn-default" role="button">Give a Recognition</a>
+    </div>
+</div>*@
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <center>
+                <h3><strong>Employee Recognitions</strong></h3>
+            </center>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <br />
+
+        @using (Html.BeginForm("Index", "UserRecognitions", FormMethod.Get))
+        {
+            <b>
+                Search:
+            </b>
+            @Html.TextBox("search")
+            <input type="submit"
+                   name="submit"
+                   class="btn btn-default"
+                   value="Search" />
+
+
+        }
+    </div>
+    <div class="col-sm-2">
+        <br />
+        <a href="~/UserRecognitions/Create" class="btn btn-default" role="button">Give a Recognition</a>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Employee", "Index", new { sortOrder = ViewBag.EmployeeSortParm })
+            @*@Html.DisplayNameFor(model => model.registeredUser.fullName)*@
+        </th>
+        <th>
+            @Html.ActionLink("Sponsor", "Index", new { sortOrder = ViewBag.SponsorSortParm })
+            @*@Html.DisplayNameFor(model => model.recGiver)*@
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.coreValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.recognition)
+        </th>
+        <th>
+            @Html.ActionLink("Date Created", "Index", new { sortOrder = ViewBag.CreateDateSortParm })
+            @*@Html.DisplayNameFor(model => model.createDate)*@
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.fullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.recGiver)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.coreValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.recognition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.createDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.recognitionID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.recognitionID }) |
+                @{
+                    // only allow delete link if director or you created the recognition
+                    MyContext db = new MyContext();
+                    Guid registeredUserID;
+                    Guid.TryParse(User.Identity.GetUserId(), out registeredUserID);
+                    RegisteredUser currentUser = db.RegisteredUsers.Find(registeredUserID);
+                    var giver = item.recGiver;
+                    if (currentUser != null)
+                    {
+                        bool isDirector = currentUser.role == RegisteredUser.roles.Director;
+                        if (isDirector || currentUser.fullName == giver)
+                        {
+                            <a href="~/UserRecognitions/delete/@item.recognitionID"> Delete</a>
+                        }
+                    }
+                }
+            </td>
+        </tr>
+    }
+
+</table>

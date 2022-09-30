@@ -1,0 +1,198 @@
+﻿@model IEnumerable<CentricProjectTeam4.Models.UserRecognition>
+
+@using CentricProjectTeam4.DAL;
+@using CentricProjectTeam4.Models;
+@using Microsoft.AspNet.Identity;
+
+<style>
+    .table-warning {
+        background-color: #C9B037;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+        .table-warning:hover, .table-warning.table-hover .table-warning:focus, .table-warning:active, .table-warning.active, .open .dropdown-toggle.table-warning {
+            background-color: #AF9500;
+            color: #C9B037;
+            border-color: #FFF;
+        }
+    .table-success {
+        background-color: #B4B4B4;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+        .table-success:hover, .table-success:focus, .table-success:active, .table-success.active, .open .dropdown-toggle.table-success {
+            background-color: #D7D7D7;
+            color: #B4B4B4;
+            border-color: #FFF;
+        }
+    .table-danger {
+        background-color: #6A3805;
+        color: #FFF;
+        border-color: #f5b843;
+    }
+        .table-danger:hover, .table-danger:focus, .table-danger:active, .table-danger.active, .open .dropdown-toggle.table-danger {
+            background-color: #AD8A56;
+            color: #6A3805;
+            border-color: #FFF;
+        }
+</style>
+
+
+@{
+    var rank = 0;
+
+    var employees = Model.Select(x => x.registeredUser.fullName).Distinct().ToList();
+
+    var leaderboard = new List<LeaderBoardInfo>();
+
+    foreach (var person in employees)
+    {
+        var lead = new LeaderBoardInfo();
+
+        lead.employee = person;
+
+        var count = Model
+                    .Where(x => x.registeredUser.fullName == person)
+                    .Count();
+
+        var deliveryRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Delivery_Excellence)
+                    .Count();
+
+        var integrityRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Integrity_And_Openness)
+                    .Count();
+
+        var stewardshipRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Stewardship)
+                    .Count();
+
+        var cultureRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Culture)
+                    .Count();
+
+        var goodRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Greater_Good)
+                    .Count();
+
+        var innovationRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Innovation)
+                    .Count();
+
+        var balancedRecsCount = Model
+                    .Where(x => x.registeredUser.fullName == person && x.coreValue == UserRecognition.values.Live_A_Balanced_Life)
+                    .Count();
+
+        lead.numRecognitions = count;
+
+        lead.numDeliveryRecs = deliveryRecsCount;
+
+        lead.numIntegrityRecs = integrityRecsCount;
+
+        lead.numStewardshipRecs = stewardshipRecsCount;
+
+        lead.numCultureRecs = cultureRecsCount;
+
+        lead.numGoodRecs = goodRecsCount;
+
+        lead.numInnovationRecs = innovationRecsCount;
+
+        lead.numBalancedRecs = balancedRecsCount;
+
+        leaderboard.Add(lead);
+    }
+
+    var orderedLeaderboard = leaderboard.OrderByDescending(x => x.numRecognitions).ThenBy(x => x.numDeliveryRecs).ThenBy(x => x.numIntegrityRecs).ThenBy(x => x.numStewardshipRecs).ThenBy(x => x.numCultureRecs).ThenBy(x => x.numGoodRecs).ThenBy(x => x.numInnovationRecs).ThenBy(x => x.numBalancedRecs);
+}
+
+
+<table class="table table-hover">
+    <tr>
+        <th class="text-center" width=50px>
+            <p>Rank</p>
+        </th>
+        <th class="text-center" width=50px>
+        </th>
+        <th class="text-center" width=100px>
+            <p>Employee</p>
+        </th>
+        <th class="text-center" width=100px>
+            <p>Number of Recognitions</p>
+        </th>
+    </tr>
+
+    @foreach (var item in orderedLeaderboard)
+    {
+        rank += 1;
+
+        if (rank == 1)
+        {
+            <tr class="table-warning">
+                <td>
+                    @rank
+                </td>
+                <td>
+                    <p></p>
+                </td>
+                <td>
+                    @item.employee
+                </td>
+                <td>
+                    @item.numRecognitions
+                </td>
+            </tr>
+        }
+        else if (rank == 2)
+        {
+            <tr class="table-success">
+                <td>
+                    @rank
+                </td>
+                <td>
+                    <p></p>
+                </td>
+                <td>
+                    @item.employee
+                </td>
+                <td>
+                    @item.numRecognitions
+                </td>
+            </tr>
+        }
+        else if (rank == 3)
+        {
+            <tr class="table-danger">
+                <td>
+                    @rank
+                </td>
+                <td>
+                    <p></p>
+                </td>
+                <td>
+                    @item.employee
+                </td>
+                <td>
+                    @item.numRecognitions
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    @rank
+                </td>
+                <td>
+                    <p></p>
+                </td>
+                <td>
+                    @item.employee
+                </td>
+                <td>
+                    @item.numRecognitions
+                </td>
+            </tr>
+        }
+    }
+
+</table>

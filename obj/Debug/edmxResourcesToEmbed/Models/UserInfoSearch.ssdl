@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MIS4200Team4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="RegisteredUsers">
+    <Key>
+      <PropertyRef Name="registeredUserID" />
+    </Key>
+    <Property Name="registeredUserID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="firstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="lastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="email" Type="nvarchar(max)" />
+    <Property Name="location" Type="int" Nullable="false" />
+    <Property Name="role" Type="int" Nullable="false" />
+    <Property Name="hireDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="MIS4200Team4ModelStoreContainer">
+    <EntitySet Name="RegisteredUsers" EntityType="Self.RegisteredUsers" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

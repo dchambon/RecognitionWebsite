@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "NotAuthorized";
+}
+
+
+<div class="alert alert-warning">
+    <h2>Restricted Access</h2>
+    <h3>Users are only capable of editing their own data.</h3>
+</div>
+
+@Html.ActionLink("Return to profiles page", "index", "RegisteredUsers")

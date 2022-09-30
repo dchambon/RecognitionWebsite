@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "DirectorOnly";
+}
+
+<div class="alert alert-warning">
+    <h2>Restricted Access</h2>
+    <h3>Only directors and the original creater are allowed to delete recognitions.</h3>
+</div>
+
+@Html.ActionLink("Return to recognitions page", "index", "UserRecognitions")
+
